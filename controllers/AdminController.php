@@ -4,7 +4,7 @@
 
         public function __construct() {
             // Cargar el archivo de configuración
-            $this->config = require('./config/config.php');
+            $this->config = require_once('./config/config.php');
         }
 
         // Acción por defecto

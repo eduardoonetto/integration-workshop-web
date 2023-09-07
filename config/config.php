@@ -1,9 +1,10 @@
 <?php
 return [
+    'DB_NAME' => 'erp',
     'DB_HOST' => 'localhost',
-    'DB_USERNAME' => 'usuario',
-    'DB_PASSWORD' => 'contraseña',
-    'DEBUG_MODE' => true,
+    'DB_USERNAME' => 'erp_admin',
+    'DB_PASSWORD' => 'Hash:12!',
+    'DEBUG_MODE' => 0,
     'VIEWS_PATH' => './views/',
     'MODELS_PATH' => './models/'
     // Agrega otras variables de entorno aquí

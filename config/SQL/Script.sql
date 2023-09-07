@@ -1,0 +1,48 @@
+CREATE DATABASE integration_workshop;
+USE integration_workshop;
+
+CREATE USER 'erp_admin'@'localhost' IDENTIFIED BY 'Hash:12!';
+GRANT ALL PRIVILEGES ON * . * TO 'erp_admin'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE TABLE USERS (
+id INT auto_increment PRIMARY KEY,
+name VARCHAR(80),
+email VARCHAR(80),
+password VARCHAR(80),
+change_password BOOLEAN
+);
+
+-- NOTE: PASSWORD ABC123
+INSERT INTO USERS VALUES (DEFAULT, 'EDUARDO ONETTO', 'testemail@gmail.com', 'bbf2dead374654cbb32a917afd236656', FALSE);
+
+CREATE TABLE ROLES(
+id INT auto_increment PRIMARY KEY,
+name VARCHAR(80)
+);
+
+-- ROLES PRETERMINADOS:
+INSERT INTO ROLES (name) VALUES ('ADMIN'),('SUPERVISOR'),('BODEGA'),('POSTVENTA');
+
+CREATE TABLE USERS_ROLES(
+id INT auto_increment PRIMARY KEY,
+id_user INT,
+id_role INT,
+FOREIGN KEY (ID_USER) REFERENCES USER(ID),
+FOREIGN KEY (ID_ROLE) REFERENCES ROLES(ID)
+);
+
+-- EDUARDO USER IS ADMIN:
+INSERT INTO USERS_ROLES VALUES (DEFAULT, 1, 1); 
+
+
+-- VER ROLES Y USUARIOS ASIGNADOS
+CREATE OR REPLACE VIEW UserRolesView AS
+SELECT
+    EU.name AS User_Name,
+    EU.email AS User_Email,
+    R.name AS Role_Name
+FROM
+    USERS EU
+JOIN USERS_ROLES UR ON EU.id = UR.id_user
+JOIN ROLES R ON UR.id_role = R.id;

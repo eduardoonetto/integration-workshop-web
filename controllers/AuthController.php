@@ -1,10 +1,14 @@
 <?php
+    require_once('./models/UserModel.php');
+
     class AuthController {
         private $config;
+        private $User;
 
         public function __construct() {
             // Cargar el archivo de configuración
-            $this->config = require('./config/config.php');
+            $this->config = require_once('./config/config.php');
+            $this->User = new UserModel();
         }
 
         // Acción por defecto
@@ -15,7 +19,8 @@
                 'titulo' => 'Login',
                 'contenido' => 'Este es el contenido de mi página'
             );
-            
+
+            $data['user'] = $this->User->obtenerUsuarioByEmail('EDUARDO.ONETTO97@GMAIL.COM')[0];
             $this->_render('auth/index', $data);
         }
 
