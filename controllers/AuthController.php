@@ -19,8 +19,6 @@
                 'titulo' => 'Login',
                 'contenido' => 'Este es el contenido de mi página'
             );
-
-            $data['user'] = $this->User->obtenerUsuarioByEmail('EDUARDO.ONETTO97@GMAIL.COM')[0];
             $this->_render('auth/index', $data);
         }
 

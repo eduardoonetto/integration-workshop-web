@@ -16,7 +16,7 @@
   <form>
     <div class="user-box">
       <input type="text" name="" required="">
-      <label>Username <?php echo var_dump($user['NAME']); ?></label>
+      <label>Username</label>
     </div>
     <div class="user-box">
       <input type="password" name="" required="">
