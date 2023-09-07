@@ -1,6 +1,6 @@
 <?php
 return [
-    'DB_NAME' => 'erp',
+    'DB_NAME' => 'integration_workshop',
     'DB_HOST' => 'localhost',
     'DB_USERNAME' => 'erp_admin',
     'DB_PASSWORD' => 'Hash:12!',
