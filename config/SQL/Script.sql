@@ -1,48 +1,101 @@
+-- Crear la base de datos
 CREATE DATABASE integration_workshop;
 USE integration_workshop;
 
+-- Crear un usuario con privilegios
 CREATE USER 'erp_admin'@'localhost' IDENTIFIED BY 'Hash:12!';
-GRANT ALL PRIVILEGES ON * . * TO 'erp_admin'@'localhost';
+GRANT ALL PRIVILEGES ON integration_workshop.* TO 'erp_admin'@'localhost';
 FLUSH PRIVILEGES;
 
-CREATE TABLE USERS (
-id INT auto_increment PRIMARY KEY,
-name VARCHAR(80),
-email VARCHAR(80),
-password VARCHAR(80),
-change_password BOOLEAN
+-- Crear la tabla de usuarios
+CREATE TABLE Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(80),
+    email VARCHAR(80) UNIQUE,
+    password VARCHAR(128), -- Recomiendo usar VARCHAR(128) para contraseñas con hash
+    change_password BOOLEAN
 );
 
--- NOTE: PASSWORD ABC123
-INSERT INTO USERS VALUES (DEFAULT, 'EDUARDO ONETTO', 'testemail@gmail.com', 'bbf2dead374654cbb32a917afd236656', FALSE);
+-- NOTA: Contraseña ABC123 con hash
+INSERT INTO Users (name, email, password, change_password)
+VALUES ('EDUARDO ONETTO', 'testemail@gmail.com', 'bbf2dead374654cbb32a917afd236656', FALSE);
 
-CREATE TABLE ROLES(
-id INT auto_increment PRIMARY KEY,
-name VARCHAR(80)
+-- Crear la tabla de roles
+CREATE TABLE Roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(80) UNIQUE -- Asegurar que los nombres de los roles sean únicos
 );
 
--- ROLES PRETERMINADOS:
-INSERT INTO ROLES (name) VALUES ('ADMIN'),('SUPERVISOR'),('BODEGA'),('POSTVENTA');
+-- Roles predeterminados
+INSERT INTO Roles (name) VALUES ('ADMIN'), ('SUPERVISOR'), ('BODEGA'), ('POSTVENTA');
 
-CREATE TABLE USERS_ROLES(
-id INT auto_increment PRIMARY KEY,
-id_user INT,
-id_role INT,
-FOREIGN KEY (ID_USER) REFERENCES USER(ID),
-FOREIGN KEY (ID_ROLE) REFERENCES ROLES(ID)
+-- Crear la tabla de asignación de roles a usuarios
+CREATE TABLE Users_Roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    role_id INT,
+    FOREIGN KEY (user_id) REFERENCES Users(id),
+    FOREIGN KEY (role_id) REFERENCES Roles(id)
 );
 
--- EDUARDO USER IS ADMIN:
-INSERT INTO USERS_ROLES VALUES (DEFAULT, 1, 1); 
+-- Asignar el rol de ADMIN a EDUARDO
+INSERT INTO Users_Roles (user_id, role_id)
+VALUES (1, 1); 
 
-
--- VER ROLES Y USUARIOS ASIGNADOS
+-- Ver roles y usuarios asignados usando una vista
 CREATE OR REPLACE VIEW UserRolesView AS
 SELECT
-    EU.name AS User_Name,
-    EU.email AS User_Email,
+    U.name AS User_Name,
+    U.email AS User_Email,
     R.name AS Role_Name
 FROM
-    USERS EU
-JOIN USERS_ROLES UR ON EU.id = UR.id_user
-JOIN ROLES R ON UR.id_role = R.id;
+    Users AS U
+JOIN Users_Roles AS UR ON U.id = UR.user_id
+JOIN Roles AS R ON UR.role_id = R.id;
+
+CREATE TABLE Vehicles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    make VARCHAR(50),
+    model VARCHAR(50),
+    year INT,
+    VIN VARCHAR(17) UNIQUE, -- Número de identificación del vehículo
+    customer_id INT, -- ID del cliente propietario
+    FOREIGN KEY (customer_id) REFERENCES Customers(id)
+);
+
+CREATE TABLE Customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(80),
+    email VARCHAR(80),
+    phone VARCHAR(15),
+    address VARCHAR(100)
+);
+CREATE TABLE WorkOrders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT, -- ID del vehículo relacionado
+    date_created DATE,
+    status VARCHAR(20), -- Estado de la orden (por ejemplo, "En Proceso", "Completada", "Pendiente")
+    description TEXT,
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicles(id)
+);
+CREATE TABLE Services (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    work_order_id INT, -- ID de la orden de trabajo relacionada
+    service_name VARCHAR(100),
+    cost DECIMAL(10, 2), -- Costo del servicio
+    FOREIGN KEY (work_order_id) REFERENCES WorkOrders(id)
+);
+CREATE TABLE MaterialsUsed (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    service_id INT, -- ID del servicio relacionado
+    material_name VARCHAR(100),
+    quantity INT,
+    cost_per_unit DECIMAL(10, 2),
+    FOREIGN KEY (service_id) REFERENCES Services(id)
+);
+CREATE TABLE MaterialInventory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    material_name VARCHAR(100) UNIQUE,
+    quantity INT,
+    unit_price DECIMAL(10, 2)
+);
