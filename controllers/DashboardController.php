@@ -1,4 +1,5 @@
 <?php
+    require_once './utils/RequestUtils.php';
     class DashboardController {
         private $config;
 

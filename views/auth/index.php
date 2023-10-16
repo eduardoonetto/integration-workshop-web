@@ -13,23 +13,23 @@
 <body>
 <div class="login-box">
   <h2><i class="fa-regular fa-user"></i></h2>
-  <form>
+  <form method="POST" action="auth/login">
     <div class="user-box">
-      <input type="text" name="" required="">
-      <label>Username</label>
+      <input type="email" name="email" required="">
+      <label>Email</label>
     </div>
     <div class="user-box">
-      <input type="password" name="" required="">
+      <input type="password" name="password" required="">
       <label>Password</label>
     </div>
     <center>
-    <a href="#">
+    <button  href="#">
       <span></span>
       <span></span>
       <span></span>
       <span></span>
       Submit <i class="fa-solid fa-right-to-bracket"></i>
-    </a>
+    </button>
     </center>
   </form>
 </div>

@@ -1,7 +1,7 @@
 <?php
 class UserModel {
     private $conexion;
-    private $table = 'erp_users';
+    private $table = 'users';
     public function __construct() {
         $this->conexion = require('./config/ConnectionSql.php');
     }
@@ -33,7 +33,7 @@ class UserModel {
     {
         $passwordMd5 = md5($password);
         $email = mysqli_real_escape_string($this->conexion, $email);
-        $consulta = "SELECT name, email, change_password FROM " . $this->table . " WHERE email = '$email' AND password = '$passwordMd5'";
+        $consulta = "SELECT EU.name AS User_Name, EU.email AS User_Email, R.name AS Role_Name FROM USERS EU JOIN USERS_ROLES UR ON EU.id = UR.id_user JOIN ROLES R ON UR.id_role = R.id WHERE EU.email = '$email' AND EU.password = '$passwordMd5'";
         $resultado = mysqli_query($this->conexion, $consulta);
 
         // Comprobar si se encontró un usuario válido
