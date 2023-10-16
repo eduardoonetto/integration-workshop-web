@@ -40,7 +40,7 @@
                 $data = array(
                     'error' => 'Usuario no registrado o contraseña incorrecta'
                 );
-                $this->_render('auth/index', $data);
+                $this->_render('auth', $data);
             }
             /*$data = array(
                 'email' => 'Login',
