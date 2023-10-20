@@ -27,9 +27,13 @@ Include conf/extra/httpd-vhosts.conf
 </VirtualHost>
 ```
 
-- Abrir Archivo Host en C:\Windows\System32\drivers\etc y añadir el dominio configurado en apache
+- Abrir Archivo hosts en C:\Windows\System32\drivers\etc y añadir el dominio configurado en apache
 
 ```
 127.0.0.1 integrations-workshop.com.devel
 ```
 - Reiniciar Wamp
+
+- En config/ConnectionSql.php cambiar credenciales por las que tengas en tu equipo.
+
+- Cargar Script BD en MySQL
