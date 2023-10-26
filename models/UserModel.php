@@ -33,7 +33,7 @@ class UserModel {
     {
         $passwordMd5 = md5($password);
         $email = mysqli_real_escape_string($this->conexion, $email);
-        $consulta = "SELECT EU.name AS User_Name, EU.email AS User_Email, R.name AS Role_Name FROM USERS EU JOIN USERS_ROLES UR ON EU.id = UR.id_user JOIN ROLES R ON UR.id_role = R.id WHERE EU.email = '$email' AND EU.password = '$passwordMd5'";
+        $consulta = "SELECT EU.name AS User_Name, EU.email AS User_Email, R.name AS Role_Name FROM USERS EU JOIN USERS_ROLES UR ON EU.id = UR.user_id JOIN ROLES R ON UR.role_id = R.id WHERE EU.email = '$email' AND EU.password = '$passwordMd5'";
         $resultado = mysqli_query($this->conexion, $consulta);
 
         // Comprobar si se encontró un usuario válido

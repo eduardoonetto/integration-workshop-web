@@ -2,7 +2,7 @@
     require_once './utils/RequestUtils.php';
     class AdminController {
         private $config;
-
+        
         public function __construct() {
             // Cargar el archivo de configuración
             $this->config = require_once('./config/config.php');
@@ -10,14 +10,17 @@
 
         // Acción por defecto
         public function index() {
-            // Lógica para la página de inicio del administrador
-            // Datos que deseas pasar a la vista
+            session_start();
             $data = array(
-                'titulo' => 'Mi Página',
-                'contenido' => 'Este es el contenido de mi página'
+                'titulo' => 'Administracion de Usuarios',
+                'contenido' => 'Registre usuarios a su sistema'
             );
-            
-            $this->_render('admin/index', $data);
+            $midata = array_merge($_SESSION['user'], $data);
+            $this->_render('admin/adminuser', $midata);
+        }
+
+        public function adminuser(){
+ 
         }
 
         
