@@ -1,8 +1,8 @@
 <?php
     require_once './utils/RequestUtils.php';
+    session_start();
     class DashboardController {
         private $config;
-
         public function __construct() {
             // Cargar el archivo de configuración
             $this->config = require_once('./config/config.php');
@@ -12,12 +12,16 @@
         public function index() {
             // Lógica para la página de inicio del administrador
             // Datos que deseas pasar a la vista
-            $data = array(
-                'titulo' => 'Mi Página',
-                'contenido' => 'Este es el contenido de mi página'
-            );
-            
-            $this->_render('dashboard/index', $data);
+            //var_dump($_SESSION);
+            if (isset($_SESSION['user']['User_Name'])) {
+                    $this->_render('dashboard/index', $_SESSION['user']);
+            } else {
+                // El usuario no ha iniciado sesión, redirige a una página de inicio de sesión o muestra un mensaje de error
+                $data = array(
+                    'error' => 'Sesión Expirada'
+                );
+                header("Location: /auth?session=expired");
+            }
         }
 
         

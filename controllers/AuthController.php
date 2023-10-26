@@ -15,6 +15,10 @@
         public function index() {
             // Lógica para la página de inicio del administrador
             // Datos que deseas pasar a la vista
+            // Datos que deseas pasar a la vista
+            session_start();
+            session_unset();
+            session_destroy();
             $data = array(
                 'titulo' => 'Login',
                 'contenido' => 'Este es el contenido de mi página'
@@ -24,7 +28,7 @@
 
         public function login() {
             // Lógica para la página de inicio del administrador
-            // Datos que deseas pasar a la vista
+            session_start();
             $email = RequestUtils::getPostData('email');
             $password = RequestUtils::getPostData('password');
             var_dump($email);
@@ -32,7 +36,6 @@
             $userData = ($this->User->login($email, $password) ? $this->User->login($email, $password) : false);
             if($userData){
                 //crear session:
-                session_start();
                 $_SESSION['user'] = $userData;
                 header("Location: /dashboard");
             }else{
